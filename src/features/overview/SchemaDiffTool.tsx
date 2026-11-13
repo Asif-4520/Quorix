@@ -1,0 +1,335 @@
+import { ArrowRight, Check, Copy, GitCompareArrows, RefreshCw } from 'lucide-react';
+import type React from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Badge } from '../../components/ui/Badge';
+import { Checkbox } from '../../components/ui/Checkbox';
+import { EngineIcon, SqlQueryIcon } from '../../components/ui/DatabaseIcons';
+import { computeSchemaDiff } from '../../services/schemaDiff';
+import { introspectSchema } from '../../services/tauri';
+import { useConnectionStore } from '../../stores/connectionStore';
+import { useWorkspaceStore } from '../../stores/workspaceStore';
+import type { SchemaIntrospection } from '../../types/database';
+
+interface SchemaDiffToolProps {
+  initialSourceConnId?: string;
+  initialTargetConnId?: string;
+  onShowToast: (msg: string, type?: 'success' | 'error' | 'info') => void;
+}
+
+export const SchemaDiffTool: React.FC<SchemaDiffToolProps> = ({
+  initialSourceConnId,
+  initialTargetConnId,
+  onShowToast,
+}) => {
+  const activeConnections = useConnectionStore((s) => s.activeConnections);
+  const introspectionsByConn = useConnectionStore((s) => s.introspectionsByConn);
+  const openSqlTab = useWorkspaceStore((s) => s.openSqlTab);
+
+  const [sourceId, setSourceId] = useState(initialSourceConnId || activeConnections[0]?.id || '');
+  const [targetId, setTargetId] = useState(
+    initialTargetConnId || activeConnections[1]?.id || activeConnections[0]?.id || '',
+  );
+  const [sourceSchema, setSourceSchema] = useState('');
+  const [targetSchema, setTargetSchema] = useState('');
+
+  const [sourceIntrospection, setSourceIntrospection] = useState<SchemaIntrospection | null>(null);
+  const [targetIntrospection, setTargetIntrospection] = useState<SchemaIntrospection | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [selectedOps, setSelectedOps] = useState<Record<string, boolean>>({});
+  const [copied, setCopied] = useState(false);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    };
+  }, []);
+
+  const loadComparison = async () => {
+    if (!sourceId || !targetId) return;
+    setLoading(true);
+    try {
+      const [src, tgt] = await Promise.all([
+        introspectSchema(sourceId),
+        introspectSchema(targetId),
+      ]);
+      setSourceIntrospection(src);
+      setTargetIntrospection(tgt);
+      if (!sourceSchema && src.schemas[0]) {
+        const pref = src.schemas.find((s) => !s.isSystem) || src.schemas[0];
+        setSourceSchema(pref.name);
+      }
+      if (!targetSchema && tgt.schemas[0]) {
+        const pref = tgt.schemas.find((s) => !s.isSystem) || tgt.schemas[0];
+        setTargetSchema(pref.name);
+      }
+    } catch (err) {
+      onShowToast(`Schema compare failed: ${err}`, 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (sourceId && introspectionsByConn[sourceId] && !sourceIntrospection) {
+      const src = introspectionsByConn[sourceId];
+      setSourceIntrospection(src);
+      if (!sourceSchema && src.schemas[0]) {
+        setSourceSchema((src.schemas.find((s) => !s.isSystem) || src.schemas[0]).name);
+      }
+    }
+    if (targetId && introspectionsByConn[targetId] && !targetIntrospection) {
+      const tgt = introspectionsByConn[targetId];
+      setTargetIntrospection(tgt);
+      if (!targetSchema && tgt.schemas[0]) {
+        setTargetSchema((tgt.schemas.find((s) => !s.isSystem) || tgt.schemas[0]).name);
+      }
+    }
+  }, [
+    sourceId,
+    targetId,
+    introspectionsByConn,
+    sourceIntrospection,
+    targetIntrospection,
+    sourceSchema,
+    targetSchema,
+  ]);
+
+  const targetConn = activeConnections.find((c) => c.id === targetId);
+  const sourceConn = activeConnections.find((c) => c.id === sourceId);
+
+  const diffResult = useMemo(() => {
+    if (!sourceIntrospection || !targetIntrospection || !targetConn) return null;
+    return computeSchemaDiff(sourceIntrospection, targetIntrospection, {
+      sourceSchema: sourceSchema || undefined,
+      targetSchema: targetSchema || undefined,
+      targetEngine: targetConn.engineKind,
+    });
+  }, [sourceIntrospection, targetIntrospection, sourceSchema, targetSchema, targetConn]);
+
+  useEffect(() => {
+    if (!diffResult) return;
+    const defaults: Record<string, boolean> = {};
+    for (const op of diffResult.operations) {
+      defaults[op.id] = op.enabled;
+    }
+    setSelectedOps(defaults);
+  }, [diffResult]);
+
+  const generatedSql = useMemo(() => {
+    if (!diffResult) return '';
+    const active = diffResult.operations.filter((op) => selectedOps[op.id] ?? op.enabled);
+    if (active.length === 0) return '-- No migration steps selected';
+    return [
+      `-- Migration Script: ${sourceConn?.name || 'Source'} -> ${targetConn?.name || 'Target'}`,
+      '-- Generated by Quorix Schema Diff',
+      '',
+      ...active.map((op) => `-- ${op.summary}\n${op.sql}`),
+    ].join('\n\n');
+  }, [diffResult, selectedOps, sourceConn?.name, targetConn?.name]);
+
+  if (activeConnections.length === 0) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center p-8 text-xs text-[var(--text-muted)] gap-2">
+        <GitCompareArrows size={28} className="opacity-40" />
+        <p className="font-medium text-[var(--text)]">Schema Diff &amp; Migration Generator</p>
+        <p>Connect to at least one database first to compare schemas and generate ALTER SQL.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex-1 flex flex-col min-h-0 bg-[var(--bg)]">
+      <div className="p-3 border-b border-[var(--border)] bg-[var(--bg-panel)] flex flex-wrap items-center gap-3 text-xs">
+        <div className="flex items-center gap-1.5 font-semibold text-[var(--text)]">
+          <GitCompareArrows size={15} className="text-[var(--accent)]" />
+          <span>Schema Diff</span>
+        </div>
+
+        <div className="flex items-center gap-2 flex-1 min-w-[240px]">
+          <span className="text-[var(--text-muted)]">Source:</span>
+          <select
+            value={sourceId}
+            onChange={(e) => {
+              setSourceId(e.target.value);
+              setSourceIntrospection(null);
+              setSourceSchema('');
+            }}
+            className="py-1"
+          >
+            {activeConnections.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name} ({c.engine})
+              </option>
+            ))}
+          </select>
+          {sourceIntrospection && sourceIntrospection.schemas.length > 0 && (
+            <select
+              value={sourceSchema}
+              onChange={(e) => setSourceSchema(e.target.value)}
+              className="py-1 font-mono"
+            >
+              {sourceIntrospection.schemas.map((s) => (
+                <option key={s.name} value={s.name}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          )}
+
+          <ArrowRight size={14} className="text-[var(--accent)] shrink-0" />
+
+          <span className="text-[var(--text-muted)]">Target:</span>
+          <select
+            value={targetId}
+            onChange={(e) => {
+              setTargetId(e.target.value);
+              setTargetIntrospection(null);
+              setTargetSchema('');
+            }}
+            className="py-1"
+          >
+            {activeConnections.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name} ({c.engine})
+              </option>
+            ))}
+          </select>
+          {targetIntrospection && targetIntrospection.schemas.length > 0 && (
+            <select
+              value={targetSchema}
+              onChange={(e) => setTargetSchema(e.target.value)}
+              className="py-1 font-mono"
+            >
+              {targetIntrospection.schemas.map((s) => (
+                <option key={s.name} value={s.name}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+
+        <button
+          type="button"
+          onClick={loadComparison}
+          disabled={loading || !sourceId || !targetId}
+          className="px-3 py-1.5 rounded-md bg-[var(--accent)] text-[var(--accent-text)] font-semibold hover:bg-[var(--accent-hover)] inline-flex items-center gap-1.5 disabled:opacity-50"
+        >
+          <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
+          {loading ? 'Comparing…' : 'Compare Schemas'}
+        </button>
+      </div>
+
+      {!diffResult ? (
+        <div className="flex-1 flex flex-col items-center justify-center text-xs text-[var(--text-muted)] gap-2">
+          <p>Choose Source &amp; Target connections/schemas and click Compare Schemas.</p>
+        </div>
+      ) : (
+        <div className="flex-1 grid md:grid-cols-2 min-h-0 divide-x divide-[var(--border)]">
+          <div className="flex flex-col min-h-0 overflow-y-auto p-4 space-y-3">
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2">
+                {sourceConn && <EngineIcon engine={sourceConn.engineKind} size={13} />}
+                <span className="font-semibold text-[var(--text)]">
+                  Detected Differences ({diffResult.operations.length})
+                </span>
+              </div>
+              <Badge variant="neutral" size="sm">
+                {diffResult.identicalTables} identical tables
+              </Badge>
+            </div>
+
+            {diffResult.operations.length === 0 ? (
+              <div className="p-6 rounded-lg border border-dashed border-[var(--border)] text-center text-xs text-[var(--success)]">
+                Schemas match — no structural differences found.
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                {diffResult.operations.map((op) => {
+                  const checked = selectedOps[op.id] ?? op.enabled;
+                  return (
+                    <div
+                      key={op.id}
+                      onClick={() => setSelectedOps((p) => ({ ...p, [op.id]: !checked }))}
+                      className={`p-2.5 rounded-lg border text-xs cursor-pointer flex items-start gap-2.5 transition-colors ${
+                        checked
+                          ? 'bg-[var(--bg-panel)] border-[var(--border)]'
+                          : 'bg-[var(--bg-sidebar)]/50 border-[var(--border-subtle)] opacity-60'
+                      }`}
+                    >
+                      <Checkbox
+                        checked={checked}
+                        onChange={(v) => setSelectedOps((p) => ({ ...p, [op.id]: v }))}
+                        size="sm"
+                      />
+                      <div className="flex-1 min-w-0 space-y-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <Badge
+                            variant={
+                              op.severity === 'create'
+                                ? 'success'
+                                : op.severity === 'drop'
+                                  ? 'error'
+                                  : 'warning'
+                            }
+                            size="sm"
+                          >
+                            {op.severity.toUpperCase()}
+                          </Badge>
+                          <span className="font-medium text-[var(--text)]">{op.summary}</span>
+                        </div>
+                        <pre className="font-mono text-[10.5px] text-[var(--text-muted)] truncate">
+                          {op.sql}
+                        </pre>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-col min-h-0 p-4 space-y-3 bg-[var(--bg-sidebar)]">
+            <div className="flex items-center justify-between gap-2 text-xs">
+              <span className="font-semibold text-[var(--text)]">Generated Migration SQL</span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(generatedSql);
+                    setCopied(true);
+                    onShowToast('Migration SQL copied', 'info');
+                    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+                    copyTimerRef.current = setTimeout(() => setCopied(false), 1500);
+                  }}
+                  className="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--bg-panel)] hover:bg-[var(--bg-hover)] inline-flex items-center gap-1"
+                >
+                  {copied ? <Check size={12} /> : <Copy size={12} />}
+                  Copy SQL
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    openSqlTab({
+                      title: `Migrate -> ${targetConn?.name || 'Target'}`,
+                      sql: generatedSql,
+                      connectionId: targetId,
+                    })
+                  }
+                  className="px-2.5 py-1 rounded bg-[var(--accent)] text-[var(--accent-text)] font-semibold hover:bg-[var(--accent-hover)] inline-flex items-center gap-1"
+                >
+                  <SqlQueryIcon size={12} /> Open in SQL Editor
+                </button>
+              </div>
+            </div>
+
+            <pre className="flex-1 overflow-auto p-3 rounded-lg bg-[var(--code-bg)] border border-[var(--border)] font-mono text-[11.5px] text-[var(--text)] whitespace-pre-wrap select-text">
+              {generatedSql}
+            </pre>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

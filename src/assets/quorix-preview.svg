@@ -1,0 +1,254 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0e12" />
+      <stop offset="50%" stop-color="#111620" />
+      <stop offset="100%" stop-color="#0a0d12" />
+    </linearGradient>
+    <linearGradient id="accentGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="24" stdDeviation="32" flood-color="#000000" flood-opacity="0.75" />
+    </filter>
+    <filter id="drawerShadow" x="-20%" y="-10%" width="140%" height="120%">
+      <feDropShadow dx="-12" dy="0" stdDeviation="16" flood-color="#000000" flood-opacity="0.6" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#07090c" rx="16" />
+
+  <g filter="url(#shadow)">
+    <rect x="30" y="24" width="1140" height="627" rx="12" fill="#0c0e12" stroke="#242c38" stroke-width="1.5" />
+
+    <!-- TitleBar -->
+    <rect x="30" y="24" width="1140" height="42" rx="12" fill="#131821" />
+    <rect x="30" y="54" width="1140" height="12" fill="#131821" />
+    <line x1="30" y1="66" x2="1170" y2="66" stroke="#242c38" stroke-width="1" />
+
+    <!-- Window controls (right) -->
+    <circle cx="1140" cy="45" r="5" fill="#f43f5e" opacity="0.8" />
+    <circle cx="1122" cy="45" r="5" fill="#f59e0b" opacity="0.8" />
+    <circle cx="1104" cy="45" r="5" fill="#10b981" opacity="0.8" />
+
+    <!-- Logo & Brand Left -->
+    <rect x="46" y="37" width="18" height="18" rx="4" fill="url(#accentGlow)" />
+    <path d="M51 46 L59 46 M55 42 L55 50" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+    <text x="72" y="50" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="700" fill="#f1f5f9" letter-spacing="0.5">QUORIX</text>
+
+    <!-- Menus -->
+    <text x="145" y="49" font-family="sans-serif" font-size="11.5" fill="#7c8ba1">File</text>
+    <text x="178" y="49" font-family="sans-serif" font-size="11.5" fill="#7c8ba1">Edit</text>
+    <text x="212" y="49" font-family="sans-serif" font-size="11.5" fill="#7c8ba1">View</text>
+    <text x="252" y="49" font-family="sans-serif" font-size="11.5" fill="#7c8ba1">Database</text>
+    <text x="318" y="49" font-family="sans-serif" font-size="11.5" fill="#7c8ba1">Help</text>
+
+    <!-- Center Connection Switcher Pill -->
+    <rect x="475" y="33" width="250" height="25" rx="6" fill="#19202c" stroke="#242c38" stroke-width="1" />
+    <rect x="481" y="37" width="22" height="17" rx="3" fill="#10b981" fill-opacity="0.15" />
+    <text x="484" y="49" font-family="monospace" font-size="9.5" font-weight="700" fill="#10b981">PG</text>
+    <text x="510" y="49" font-family="sans-serif" font-size="11" font-weight="600" fill="#f1f5f9">Production Cluster</text>
+    <rect x="635" y="38" width="46" height="15" rx="4" fill="#f43f5e" fill-opacity="0.18" stroke="#f43f5e" stroke-width="0.8" />
+    <text x="642" y="49" font-family="sans-serif" font-size="8.5" font-weight="800" fill="#f43f5e">PROD</text>
+    <path d="M708 43 L712 47 L716 43" stroke="#7c8ba1" stroke-width="1.5" fill="none" stroke-linecap="round" />
+
+    <!-- Left Tool Rail -->
+    <rect x="30" y="66" width="44" height="585" fill="#10141a" />
+    <line x1="74" y1="66" x2="74" y2="651" stroke="#242c38" stroke-width="1" />
+
+    <!-- Rail Icons -->
+    <rect x="38" y="78" width="28" height="28" rx="6" fill="#19202c" />
+    <path d="M47 88 C47 86 57 86 57 88 C57 90 47 90 47 88 M47 88 V96 C47 98 57 98 57 96 V88" stroke="#10b981" stroke-width="1.5" fill="none" />
+    <circle cx="52" cy="126" r="6" stroke="#7c8ba1" stroke-width="1.5" fill="none" />
+    <path d="M47 160 L57 160 M47 165 L54 165 M47 170 L51 170" stroke="#7c8ba1" stroke-width="1.5" />
+    <circle cx="52" cy="202" r="7" stroke="#7c8ba1" stroke-width="1.5" fill="none" />
+
+    <!-- Sidebar (Object Explorer) -->
+    <rect x="74" y="66" width="210" height="585" fill="#10141a" />
+    <line x1="284" y1="66" x2="284" y2="651" stroke="#242c38" stroke-width="1" />
+
+    <!-- Explorer Search -->
+    <rect x="84" y="78" width="190" height="26" rx="6" fill="#131821" stroke="#242c38" stroke-width="1" />
+    <text x="96" y="95" font-family="sans-serif" font-size="11" fill="#7c8ba1">Filter schema (Ctrl+P)...</text>
+
+    <!-- Schema tree -->
+    <text x="88" y="125" font-family="sans-serif" font-size="10" font-weight="700" fill="#7c8ba1" letter-spacing="0.5">PUBLIC SCHEMA</text>
+
+    <!-- Tree items -->
+    <rect x="84" y="136" width="190" height="24" rx="4" fill="none" />
+    <text x="100" y="152" font-family="sans-serif" font-size="11.5" fill="#cbd5e1">customers</text>
+    <text x="245" y="152" font-family="sans-serif" font-size="9" fill="#7c8ba1">8 cols</text>
+
+    <!-- Active Table -->
+    <rect x="80" y="164" width="198" height="26" rx="5" fill="#19202c" stroke="#10b981" stroke-width="0.8" />
+    <circle cx="92" cy="177" r="3" fill="#10b981" />
+    <text x="102" y="181" font-family="sans-serif" font-size="12" font-weight="600" fill="#f1f5f9">orders</text>
+    <text x="238" y="181" font-family="monospace" font-size="9" fill="#10b981">ACTIVE</text>
+
+    <text x="100" y="210" font-family="sans-serif" font-size="11.5" fill="#cbd5e1">order_items</text>
+    <text x="100" y="238" font-family="sans-serif" font-size="11.5" fill="#cbd5e1">payments</text>
+    <text x="100" y="266" font-family="sans-serif" font-size="11.5" fill="#cbd5e1">products</text>
+    <text x="100" y="294" font-family="sans-serif" font-size="11.5" fill="#cbd5e1">users</text>
+    <text x="100" y="322" font-family="sans-serif" font-size="11.5" fill="#cbd5e1">v_daily_sales</text>
+
+    <!-- Workspace Tabs -->
+    <rect x="284" y="66" width="886" height="36" fill="#131821" />
+    <line x1="284" y1="102" x2="1170" y2="102" stroke="#242c38" stroke-width="1" />
+
+    <!-- Active Tab: orders -->
+    <rect x="290" y="70" width="130" height="32" rx="6" fill="#0c0e12" stroke="#242c38" stroke-width="1" />
+    <line x1="290" y1="101" x2="420" y2="101" stroke="#0c0e12" stroke-width="2" />
+    <circle cx="304" cy="86" r="3.5" fill="#10b981" />
+    <text x="316" y="90" font-family="sans-serif" font-size="11.5" font-weight="600" fill="#f1f5f9">orders</text>
+    <text x="362" y="90" font-family="sans-serif" font-size="9" fill="#7c8ba1">[Data]</text>
+    <text x="404" y="90" font-family="sans-serif" font-size="11" fill="#7c8ba1">×</text>
+
+    <!-- Tab 2: Console -->
+    <rect x="424" y="73" width="115" height="26" rx="5" fill="#19202c" />
+    <text x="438" y="90" font-family="sans-serif" font-size="11" fill="#7c8ba1">Console 1</text>
+    <text x="500" y="89" font-family="sans-serif" font-size="9" fill="#7c8ba1">×</text>
+
+    <!-- Tab 3: Schema Diff -->
+    <rect x="543" y="73" width="120" height="26" rx="5" fill="#19202c" />
+    <text x="557" y="90" font-family="sans-serif" font-size="11" fill="#7c8ba1">Schema Diff</text>
+    <text x="638" y="89" font-family="sans-serif" font-size="9" fill="#7c8ba1">×</text>
+
+    <!-- Tab Strip Right Actions -->
+    <rect x="1080" y="73" width="76" height="24" rx="4" fill="#19202c" stroke="#242c38" stroke-width="0.8" />
+    <text x="1092" y="89" font-family="sans-serif" font-size="10.5" fill="#10b981">⚡ Refresh</text>
+
+    <!-- Table Toolbar -->
+    <rect x="284" y="103" width="886" height="38" fill="#10141a" />
+    <line x1="284" y1="141" x2="1170" y2="141" stroke="#242c38" stroke-width="1" />
+
+    <!-- Toolbar Filters -->
+    <rect x="296" y="110" width="220" height="24" rx="5" fill="#131821" stroke="#242c38" stroke-width="1" />
+    <text x="308" y="126" font-family="sans-serif" font-size="11" fill="#7c8ba1">Filter 1,420 rows...</text>
+
+    <rect x="524" y="110" width="95" height="24" rx="5" fill="#19202c" stroke="#242c38" stroke-width="1" />
+    <text x="536" y="126" font-family="sans-serif" font-size="10.5" fill="#cbd5e1">+ Add Filter</text>
+
+    <rect x="626" y="110" width="105" height="24" rx="5" fill="#19202c" stroke="#242c38" stroke-width="1" />
+    <text x="638" y="126" font-family="sans-serif" font-size="10.5" fill="#cbd5e1">Dim Repeats ✓</text>
+
+    <!-- Data Grid Header -->
+    <rect x="284" y="142" width="886" height="28" fill="#131821" />
+    <line x1="284" y1="170" x2="1170" y2="170" stroke="#242c38" stroke-width="1" />
+
+    <text x="300" y="160" font-family="sans-serif" font-size="11" font-weight="700" fill="#7c8ba1">#</text>
+    <text x="325" y="160" font-family="sans-serif" font-size="11" font-weight="700" fill="#f1f5f9">id <tspan fill="#7c8ba1" font-weight="400">uuid</tspan></text>
+    <text x="445" y="160" font-family="sans-serif" font-size="11" font-weight="700" fill="#f1f5f9">customer_id <tspan fill="#10b981" font-weight="600">[FK]</tspan></text>
+    <text x="585" y="160" font-family="sans-serif" font-size="11" font-weight="700" fill="#f1f5f9">total_amount <tspan fill="#7c8ba1" font-weight="400">numeric</tspan></text>
+    <text x="695" y="160" font-family="sans-serif" font-size="11" font-weight="700" fill="#f1f5f9">status <tspan fill="#7c8ba1" font-weight="400">varchar</tspan></text>
+    <text x="795" y="160" font-family="sans-serif" font-size="11" font-weight="700" fill="#f1f5f9">created_at <tspan fill="#7c8ba1" font-weight="400">timestamp</tspan></text>
+
+    <!-- Row 1 -->
+    <rect x="284" y="171" width="886" height="32" fill="#0c0e12" />
+    <line x1="284" y1="203" x2="1170" y2="203" stroke="#1b222d" stroke-width="1" />
+    <text x="300" y="191" font-family="monospace" font-size="10" fill="#7c8ba1">1</text>
+    <text x="325" y="191" font-family="monospace" font-size="11" fill="#cbd5e1">e7b3c102-4f81</text>
+    <rect x="442" y="177" width="95" height="19" rx="4" fill="#10b981" fill-opacity="0.12" />
+    <text x="448" y="190" font-family="monospace" font-size="10.5" fill="#10b981">cust_4910 ↗</text>
+    <text x="585" y="191" font-family="monospace" font-size="11" fill="#f1f5f9">$184.50</text>
+    <text x="695" y="191" font-family="sans-serif" font-size="11" fill="#10b981">completed</text>
+    <text x="795" y="191" font-family="monospace" font-size="10.5" fill="#7c8ba1">2026-11-12 18:24</text>
+
+    <!-- Row 2 -->
+    <rect x="284" y="204" width="886" height="32" fill="#10141a" />
+    <line x1="284" y1="236" x2="1170" y2="236" stroke="#1b222d" stroke-width="1" />
+    <text x="300" y="224" font-family="monospace" font-size="10" fill="#7c8ba1">2</text>
+    <text x="325" y="224" font-family="monospace" font-size="11" fill="#cbd5e1">a14e9981-01f2</text>
+    <rect x="442" y="210" width="95" height="19" rx="4" fill="#10b981" fill-opacity="0.12" />
+    <text x="448" y="223" font-family="monospace" font-size="10.5" fill="#10b981">cust_1102 ↗</text>
+    <text x="585" y="224" font-family="monospace" font-size="11" fill="#f1f5f9">$92.00</text>
+    <text x="695" y="224" font-family="sans-serif" font-size="11" fill="#f59e0b">pending</text>
+    <text x="795" y="224" font-family="monospace" font-size="10.5" fill="#7c8ba1">2026-11-12 19:10</text>
+
+    <!-- Row 3 (FOCUSED / DOUBLE CLICKED) -->
+    <rect x="284" y="237" width="886" height="32" fill="#19202c" stroke="#10b981" stroke-width="1" />
+    <line x1="284" y1="269" x2="1170" y2="269" stroke="#10b981" stroke-width="1" />
+    <text x="300" y="257" font-family="monospace" font-size="10" fill="#10b981">3</text>
+    <text x="325" y="257" font-family="monospace" font-size="11" fill="#f1f5f9">f90e12c4-90ab</text>
+    <rect x="442" y="243" width="95" height="19" rx="4" fill="#10b981" fill-opacity="0.25" stroke="#10b981" stroke-width="1" />
+    <text x="448" y="256" font-family="monospace" font-size="10.5" font-weight="700" fill="#10b981">cust_7721 ↗</text>
+    <text x="585" y="257" font-family="monospace" font-size="11" font-weight="700" fill="#10b981">$540.20</text>
+    <text x="695" y="257" font-family="sans-serif" font-size="11" fill="#38bdf8">processing</text>
+    <text x="795" y="257" font-family="monospace" font-size="10.5" fill="#7c8ba1">2026-11-12 19:42</text>
+
+    <!-- Row 4 -->
+    <rect x="284" y="270" width="886" height="32" fill="#0c0e12" />
+    <line x1="284" y1="302" x2="1170" y2="302" stroke="#1b222d" stroke-width="1" />
+    <text x="300" y="290" font-family="monospace" font-size="10" fill="#7c8ba1">4</text>
+    <text x="325" y="290" font-family="monospace" font-size="11" fill="#cbd5e1">b44301fc-2210</text>
+    <rect x="442" y="276" width="95" height="19" rx="4" fill="#10b981" fill-opacity="0.12" />
+    <text x="448" y="289" font-family="monospace" font-size="10.5" fill="#10b981">cust_8002 ↗</text>
+    <text x="585" y="290" font-family="monospace" font-size="11" fill="#f1f5f9">$39.99</text>
+    <text x="695" y="290" font-family="sans-serif" font-size="11" fill="#10b981">completed</text>
+    <text x="795" y="290" font-family="monospace" font-size="10.5" fill="#7c8ba1">2026-11-12 20:05</text>
+
+    <!-- Row 5 -->
+    <rect x="284" y="303" width="886" height="32" fill="#10141a" />
+    <line x1="284" y1="335" x2="1170" y2="335" stroke="#1b222d" stroke-width="1" />
+    <text x="300" y="323" font-family="monospace" font-size="10" fill="#7c8ba1">5</text>
+    <text x="325" y="323" font-family="monospace" font-size="11" fill="#cbd5e1">c89201aa-4389</text>
+    <rect x="442" y="309" width="95" height="19" rx="4" fill="#10b981" fill-opacity="0.12" />
+    <text x="448" y="322" font-family="monospace" font-size="10.5" fill="#10b981">cust_3140 ↗</text>
+    <text x="585" y="323" font-family="monospace" font-size="11" fill="#f1f5f9">$1,290.00</text>
+    <text x="695" y="323" font-family="sans-serif" font-size="11" fill="#10b981">shipped</text>
+    <text x="795" y="323" font-family="monospace" font-size="10.5" fill="#7c8ba1">2026-11-12 20:18</text>
+
+    <!-- FLOATING OVERLAY ROW INSPECTOR (Does NOT shrink table!) -->
+    <g filter="url(#drawerShadow)">
+      <rect x="830" y="103" width="340" height="525" rx="8" fill="#131821" stroke="#242c38" stroke-width="1.2" />
+
+      <!-- Drawer Header -->
+      <rect x="830" y="103" width="340" height="42" rx="8" fill="#19202c" />
+      <line x1="830" y1="145" x2="1170" y2="145" stroke="#242c38" stroke-width="1" />
+      <text x="846" y="128" font-family="sans-serif" font-size="12" font-weight="700" fill="#f1f5f9">Row Inspector</text>
+      <text x="942" y="128" font-family="monospace" font-size="10" fill="#10b981">#orders (Row 3)</text>
+      <rect x="1080" y="114" width="55" height="20" rx="4" fill="#10b981" fill-opacity="0.2" stroke="#10b981" stroke-width="0.8" />
+      <text x="1088" y="128" font-family="sans-serif" font-size="9" font-weight="700" fill="#10b981">STAGED</text>
+      <text x="1150" y="128" font-family="sans-serif" font-size="13" fill="#7c8ba1">×</text>
+
+      <!-- Drawer Field 1 -->
+      <text x="846" y="172" font-family="sans-serif" font-size="10.5" font-weight="600" fill="#7c8ba1">id (Primary Key)</text>
+      <rect x="846" y="180" width="308" height="28" rx="5" fill="#0c0e12" stroke="#242c38" stroke-width="1" />
+      <text x="856" y="198" font-family="monospace" font-size="11" fill="#7c8ba1">f90e12c4-90ab-4412-a189</text>
+
+      <!-- Drawer Field 2 (Foreign Key with Jump) -->
+      <text x="846" y="232" font-family="sans-serif" font-size="10.5" font-weight="600" fill="#7c8ba1">customer_id (Foreign Key)</text>
+      <rect x="846" y="240" width="308" height="30" rx="5" fill="#0c0e12" stroke="#242c38" stroke-width="1" />
+      <text x="856" y="259" font-family="monospace" font-size="11.5" fill="#10b981">cust_7721</text>
+      <rect x="1040" y="245" width="104" height="20" rx="4" fill="#10b981" fill-opacity="0.15" />
+      <text x="1048" y="259" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#10b981">Teleport (Ctrl+J) ➔</text>
+
+      <!-- Drawer Field 3 (ACTIVE EDIT MODE) -->
+      <text x="846" y="295" font-family="sans-serif" font-size="10.5" font-weight="600" fill="#10b981">total_amount (Editing...)</text>
+      <rect x="846" y="303" width="308" height="30" rx="5" fill="#19202c" stroke="#10b981" stroke-width="1.8" />
+      <text x="856" y="322" font-family="monospace" font-size="12" font-weight="700" fill="#f1f5f9">$540.20</text>
+      <line x1="915" y1="310" x2="915" y2="326" stroke="#10b981" stroke-width="1.5" />
+
+      <!-- Drawer Field 4 -->
+      <text x="846" y="358" font-family="sans-serif" font-size="10.5" font-weight="600" fill="#7c8ba1">status</text>
+      <rect x="846" y="366" width="308" height="28" rx="5" fill="#0c0e12" stroke="#242c38" stroke-width="1" />
+      <text x="856" y="384" font-family="sans-serif" font-size="11.5" fill="#38bdf8">processing</text>
+
+      <!-- Drawer Footer Actions -->
+      <line x1="830" y1="565" x2="1170" y2="565" stroke="#242c38" stroke-width="1" />
+      <rect x="846" y="580" width="140" height="32" rx="6" fill="#19202c" stroke="#242c38" stroke-width="1" />
+      <text x="864" y="600" font-family="sans-serif" font-size="11" fill="#7c8ba1">Undo (Ctrl+Alt+Z)</text>
+      <rect x="996" y="580" width="158" height="32" rx="6" fill="url(#accentGlow)" />
+      <text x="1025" y="600" font-family="sans-serif" font-size="11" font-weight="700" fill="#ffffff">Commit Change</text>
+    </g>
+
+    <!-- Bottom Status Bar -->
+    <rect x="30" y="626" width="1140" height="25" rx="0 0 12 12" fill="#131821" />
+    <line x1="30" y1="626" x2="1170" y2="626" stroke="#242c38" stroke-width="1" />
+    <circle cx="48" cy="638" r="3.5" fill="#10b981" />
+    <text x="58" y="642" font-family="sans-serif" font-size="10.5" fill="#f1f5f9">Connected (12ms)</text>
+    <text x="180" y="642" font-family="sans-serif" font-size="10.5" fill="#7c8ba1">1,420 records</text>
+    <text x="280" y="642" font-family="sans-serif" font-size="10.5" fill="#7c8ba1">Page 1 of 29</text>
+    <text x="960" y="642" font-family="sans-serif" font-size="10.5" fill="#7c8ba1">Press <tspan font-family="monospace" fill="#10b981">Ctrl+Shift+P</tspan> for Command Palette</text>
+  </g>
+</svg>
